@@ -1,60 +1,32 @@
 <script setup>
-import { ref, computed } from 'vue'
-import OperationButton from "./Components/Operationbutton.vue";
-const OPERATIONS = ['+', '-', '*', '/']
-let a = ref(11)
-let b = ref(20)
-let c = computed(() => {
-  switch (operation.value) {
-    case '+':
-      return a.value + b.value
-    case '-':
-      return a.value - b.value
-    case '/':
-      return a.value / b.value
-    case '*':
-      return a.value * b.value
-  }
+import CalculatorPage from "./Pages/CalculatorPage.vue";
+import {computed, onBeforeMount, ref} from "vue";
+import Student from "./Components/Student.vue";
+const students = ref([])
+const filterText = ref("")
+onBeforeMount(async () => {
+  let r = await fetch("students2022.json")
+  let data = await r.json()
+  students.value = data
 })
-let operation = ref('+')
-const setOp = value => {
-  operation.value = value
-}
+
+const filteredStudents = computed(() => {
+  return students.value.filter((s) => {
+    return s.first_name.trim().toLowerCase().includes(filterText.value)
+        || s.last_name.trim().toLowerCase().includes(filterText.value)
+  })
+})
 </script>
 
 <template>
-  <div class="container">
-    <input
-        type="number"
-        class="form-control frm"
-        v-model="a"
-    />
-    <input
-        type="number"
-        class="form-control frm"
-        v-model="b"
-    />
-    <div class="row mt-2">
-      <div
-          class="col-3"
-          v-for="op in OPERATIONS"
-      >
-        <OperationButton
-            @clicked="setOp(op)"
-            :operation="op"
-        />
-      </div>
+  <div class="row m-2">
+    <div class="col-12">
+      <input placeholder="Поиск" type="text" class="form-control" v-model="filterText">
     </div>
-    <hr />
-    <h1>{{ a }} {{ operation }} {{ b }} = {{ c }}</h1>
+  </div>
+  <div v-for="student in filteredStudents">
+    <Student :student="student"/>
   </div>
 </template>
 
-<style>
-.container {
-  margin-top: 15px;
-}
-.frm {
-  margin-top: 15px;
-}
-</style>
+<style></style>
