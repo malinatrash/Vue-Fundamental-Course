@@ -23,6 +23,7 @@ const url = computed(() => {
   </div>
 </template>
 
+
 <style>
 .wrapper {
   padding: 25px;
