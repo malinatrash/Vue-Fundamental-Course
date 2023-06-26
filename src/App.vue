@@ -5,6 +5,6 @@ const count = ref(0)
 
 <template>
 	<div class="flex justify-center items-center w-screen h-screen">
-		<h1>{{ count }}</h1>
+		<h1>{{}}</h1>
 	</div>
 </template>
